@@ -31,7 +31,11 @@ Lazy base64 encoding and decoding routines
 
 =head3 Exports
 
-=head4 B<routine> L<encode-base64> C<$encode-me where Buf|Str, :$pad, :@alpha, Bool :$seq = False> I<returns> C<Str|Seq>
+=head4 B<routine> L<encode-base64>
+
+B<Args> C<$encode-me where Buf|Str, :$pad, :@alpha, Bool :$seq = False>
+
+B<Returns> C<Str|Seq>
 
     encode-base64($encode-me)                  # Returns a base64 encoded string
     encode-base64($encode-me, :seq)            # Return a sequence (for stream processing)
@@ -46,7 +50,11 @@ Takes a C<Buf> and applies base64 encoding with the requested options. If passed
     say encode-base64("any carnal pleasure.")
     # YW55IGNhcm5hbCBwbGVhc3VyZS4=
 
-=head4 B<routine> L<decode-base64> C<$decode-me where Buf|Str, :$pad, :@alpha, Bool :$seq = False> I<returns> C<Buf|Seq>
+=head4 B<routine> L<decode-base64> 
+
+B<Args> C<$decode-me where Buf|Str, :$pad, :@alpha, Bool :$seq = False>
+
+B<Returns> C<Buf|Seq>
 
     decode-base64($decode-me)                  # Decodes a base64 encoded string to a Buf for further decoding
     encode-base64($encode-me, :seq)            # Return a sequence (for stream processing)
