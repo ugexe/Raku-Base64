@@ -41,7 +41,7 @@ multi sub decode-base64(:$pad = '=', |c) {
         unless ($pad ~~ Str && $pad.chars == 0|1) || $pad ~~ Bool;
     callwith(:pad($pad ~~ Bool ?? ?$pad ?? '=' !! '' !! $pad), |c)
 }
-multi sub decode-base64(Str $str, :$pad, :@alpha, Bool :$seq, |c) {
+multi sub decode-base64(Str $str, :$pad, :@alpha, Bool :$seq = False, |c) {
     return Buf.new unless $str;
     my $encodings = chars64with(@alpha);
     my $raw = $str.comb(/@$encodings/).rotor(4, :partial).map: -> $chunk {
