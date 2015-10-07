@@ -59,9 +59,9 @@ my sub chars64with(*@chars) is cached {
         die "alphabet contains {$c} of {$c > 2 ?? 64 !! 2} required encodings" unless $c == 0|2|64;
         $c == 64 ?? @chars !! $c == 2 ??  (@chars64base.Slip, @chars.Slip) !! @chars64std;
     }
-    with @chars.grep(* ~~ none(@alpha)).Slip -> @dupes {
-        die "alphabet contains {64 - @dupes.elems} of 64 required unique encodings"
-            ~ "\nduplicates: {@dupes.join(',')}";
+    if @chars.grep(* ~~ none(@alpha)) -> $dupes {
+        die "alphabet contains {64 - $dupes.elems} of 64 required unique encodings"
+            ~ "\nduplicates: {$dupes.join(',')}";
     }
     @alpha;
 }
