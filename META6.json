@@ -1,0 +1,13 @@
+{
+    "perl"        : "v6.0.0",
+    "name"        : "Base64",
+    "version"     : "*",
+    "owner"       : "ugexe",
+    "auth"        : "github:ugexe",
+    "authors"     : ["ugexe"],
+    "description" : "Lazy Base64 encoding and decoding routines",
+    "provides"    : { "Base64" : "lib/Base64.pm6" },
+    "depends"     : [ ],
+    "support"     : { "bugtracker" : "https://github.com/ugexe/zef/issues" },
+    "source-url"  : "git://github.com/ugexe/zef.git"
+}
