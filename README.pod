@@ -12,22 +12,22 @@ Lazy base64 encoding and decoding routines
 
     use Base64;
 
-    say encode-base64("g-g-g-g-g unit", :seq).join
-    > Zy1nLWctZy1nIHVuaXQ=
+    > say encode-base64("g-g-g-g-g unit", :seq).join
+    Zy1nLWctZy1nIHVuaXQ=
 
     # or more simply
 
-    say encode-base64("g-g-g-g-g unit")
-    > Zy1nLWctZy1nIHVuaXQ=
+    > say encode-base64("g-g-g-g-g unit")
+    Zy1nLWctZy1nIHVuaXQ=
 
 
-    say Buf.new(decode-base64("Zy1nLWctZy1nIHVuaXQ=", :seq)).decode
-    > g-g-g-g-g unit
+    > say Buf.new(decode-base64("Zy1nLWctZy1nIHVuaXQ=", :seq)).decode
+    g-g-g-g-g unit
 
     # or more simply
 
-    say decode-base64("Zy1nLWctZy1nIHVuaXQ=").decode
-    > g-g-g-g-g unit
+    > say decode-base64("Zy1nLWctZy1nIHVuaXQ=").decode
+    g-g-g-g-g unit
 
 =head3 Exports
 
@@ -47,8 +47,8 @@ B<Returns> C<Str|Seq>
 
 Takes a C<Buf> and applies base64 encoding with the requested options. If passed a C<Str> it will be converted to a C<Buf> via C<.ords> first.
 
-    say encode-base64("any carnal pleasure.")
-    # YW55IGNhcm5hbCBwbGVhc3VyZS4=
+    > say encode-base64("any carnal pleasure.")
+    YW55IGNhcm5hbCBwbGVhc3VyZS4=
 
 =head4 B<routine> L<decode-base64> 
 
@@ -66,8 +66,8 @@ B<Returns> C<Buf|Seq>
 
 Takes a C<Str> and applies base64 decoding with the requested options. If passed a C<Buf> it will be converted to a C<Str> with C<.decode> first.
 
-    say decode-base64("YW55IGNhcm5hbCBwbGVhc3VyZS4=")
-    # any carnal pleasure.
+    > say decode-base64("YW55IGNhcm5hbCBwbGVhc3VyZS4=")
+    any carnal pleasure.
 
 =head3 TODO 
 
