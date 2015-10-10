@@ -9,16 +9,23 @@ my @chars64uri  = chars64with('-', '_');
 # add multis that use supplies for streaming in/out
 
 proto sub encode-base64(|) is export {*}
-multi sub encode-base64(Str $str, |c) { samewith(Buf.new($str.ords), |c) }
-multi sub encode-base64(Bool :$uri! where *.so, |c) { samewith(:alpha(@chars64uri), |c) }
-multi sub encode-base64(:$pad = '=', |c) {
+multi sub encode-base64(Str $str, |c) {
+    samewith(Buf.new($str.ords), |c)
+}
+multi sub encode-base64(Bool :$uri! where *.so, |c) {
+    samewith(:alpha(@chars64uri), |c)
+}
+multi sub encode-base64(Bool :$str! where *.so, |c --> Str) {
+    try { samewith(|c).join } || ''
+}
+multi sub encode-base64(:$pad = '=', |c)            {
     die ":\$pad must be a single character (or empty) Str, or a Boolean"
         unless ($pad ~~ Str && $pad.chars == 0|1) || $pad ~~ Bool;
     callwith(:pad($pad ~~ Bool ?? ?$pad ?? '=' !! '' !! $pad), |c)
 }
-multi sub encode-base64(Buf $buf, :$pad, :@alpha, Bool :$seq = False, |c) {
-    return '' if !$buf && !$seq;
-    my $raw = $buf.rotor(3, :partial).map: -> $chunk {
+
+multi sub encode-base64(Buf $buf, :$pad, :@alpha, |c --> Seq) {
+    $buf.rotor(3, :partial).map: -> $chunk {
         state $encodings = chars64with(@alpha);
         state $padding = 0;
         my $n = [+] ($chunk.map({
@@ -30,27 +37,33 @@ multi sub encode-base64(Buf $buf, :$pad, :@alpha, Bool :$seq = False, |c) {
         (slip($encodings[$res>>.item][0..*-($padding == 2 ?? 3 !! $padding == 1 ?? 2 !! 0)]), 
             ((^$padding).map({"$pad"}).Slip if $padding)).Slip;
     }
-    ?$seq ?? $raw !! $raw.join;
 }
 
+
 proto sub decode-base64(|) is export {*}
-multi sub decode-base64(Buf $buf, |c) { samewith($buf.decode, |c) }
-multi sub decode-base64(Bool :$uri! where *.so, |c) { samewith(:alpha(@chars64uri), |c) }
-multi sub decode-base64(:$pad = '=', |c) {
+multi sub decode-base64(Buf $buf, |c) {
+    samewith($buf.decode, |c)
+}
+multi sub decode-base64(Bool :$uri! where *.so, |c) {
+    samewith(:buf, :alpha(@chars64uri), |c);
+}
+multi sub decode-base64(Bool :$buf! where *.so, |c --> Buf)  {
+    Buf.new(samewith(|c) || 0);
+}
+multi sub decode-base64(:$pad = '=', |c)            {
     die ":\$pad must be a single character (or empty) Str, or a Boolean"
         unless ($pad ~~ Str && $pad.chars == 0|1) || $pad ~~ Bool;
     callwith(:pad($pad ~~ Bool ?? ?$pad ?? '=' !! '' !! $pad), |c)
 }
-multi sub decode-base64(Str $str, :$pad, :@alpha, Bool :$seq = False, |c) {
-    return Buf.new unless $str;
+
+multi sub decode-base64(Str $str, :$pad, :@alpha, |c --> Seq) {
     my $encodings = chars64with(@alpha);
-    my $raw = $str.comb(/@$encodings/).rotor(4, :partial).map: -> $chunk {
+    $str.comb(/@$encodings/).rotor(4, :partial).map: -> $chunk {
         state %lookup = $encodings.kv.hash.antipairs;
         my $n   = [+] $chunk.map: { (%lookup{$_} || 0) +< ((state $m = 24) -= 6) }
         my $res = (16, 8, 0).map: { $n +> $_ +& 255 }
         slip($res.grep(* > 0));
     }
-    ?$seq ?? $raw !! Buf.new($raw || 0);
 }
 
 
