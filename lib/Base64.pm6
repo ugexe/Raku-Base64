@@ -16,7 +16,7 @@ multi sub encode-base64(Bool :$uri! where *.so, |c) {
     samewith(:alpha(@chars64uri), |c)
 }
 multi sub encode-base64(Bool :$str! where *.so, |c --> Str) {
-    try { samewith(|c).join } || ''; # Workaround Buf.new.rotor(1) bug for empty Buf
+    samewith(|c).join
 }
 multi sub encode-base64(:$pad = '=', |c)            {
     die ":\$pad must be a single character (or empty) Str, or a Boolean"
