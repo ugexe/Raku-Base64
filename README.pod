@@ -57,7 +57,7 @@ Takes a C<Buf> and applies base64 encoding with the requested options. If passed
     > say encode-base64("test", :str)
     dGVzdA==
 
-    > say encode-base64(Buf.new("test".ords, :str), :str)
+    > say encode-base64(Buf.new("test".ords), :str)
     dGVzdA==
 
     > say encode-base64("test").perl'
