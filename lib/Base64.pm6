@@ -27,14 +27,13 @@ multi sub encode-base64(:$pad = '=', |c)            {
 multi sub encode-base64(Buf $buf, :$pad, :@alpha, |c --> Seq) {
     $buf.rotor(3, :partial).map: -> $chunk {
         state $encodings = chars64with(@alpha);
-        state $padding = 0;
-        my $n = [+] ($chunk.map({
-                state $count += 1;
-                LAST { $padding = do with (3 - $count % 3) { ?$pad ?? $^a == 3 ?? 0 !! $^a !! 0 } }
-                $_ +< ((state $m = 24) -= 8)
-            }).Slip, ((0 x $padding).Slip if $padding)).Slip;
+        my $padding = 0;
+        my $n = [+] $chunk.pairs.map: -> $c {
+            LAST { $padding = !$pad ?? 0 !! do with (3 - ($c.key+1) % 3) { $^a == 3 ?? 0 !! $^a } }
+            $c.value +< ((state $m = 24) -= 8)
+        }
         my $res = (18, 12, 6, 0).map: { $n +> $_ +& 63 }
-        (slip($encodings[$res>>.item][0..*-($padding == 2 ?? 3 !! $padding == 1 ?? 2 !! 0)]), 
+        (slip($encodings[$res>>.item][0..*-($padding ?? $padding+1 !! 0)]),
             ((^$padding).map({"$pad"}).Slip if $padding)).Slip;
     }
 }
