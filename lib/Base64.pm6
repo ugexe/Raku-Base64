@@ -8,7 +8,7 @@ my @chars64uri  = chars64with('-', '_');
 # todo:
 # add multis that use supplies for streaming in/out
 
-proto sub encode-base64(|) is export {*}
+our proto sub encode-base64(|) is export {*}
 multi sub encode-base64(Str $str, |c) {
     samewith(Buf.new($str.ords), |c)
 }
@@ -39,7 +39,7 @@ multi sub encode-base64(Buf $buf, :$pad, :@alpha, |c --> Seq) {
 }
 
 
-proto sub decode-base64(|) is export {*}
+our proto sub decode-base64(|) is export {*}
 multi sub decode-base64(Buf $buf, |c) {
     samewith($buf.decode, |c)
 }
