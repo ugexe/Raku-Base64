@@ -16,6 +16,11 @@ subtest {
     is encode-base64(Buf.new(0), :str), 'AA==', 'encode Test on NULL/0 byte';
     is encode-base64(Buf.new(1), :str), 'AQ==', 'encode Test on byte value 1';
     is encode-base64(Buf.new(255), :str), '/w==', 'encode Test on byte value 255';
+    is encode-base64(Buf.new(<1 1>), :str), 'AQE=', 'encode Test on bytes, value 1 1';
+    is encode-base64(Blob.new(0), :str), 'AA==', 'encode Test on NULL/0 immutable byte';
+    is encode-base64(Blob.new(1), :str), 'AQ==', 'encode Test on immutable byte value 1';
+    is encode-base64(Blob.new(255), :str), '/w==', 'encode Test on immutable byte value 255';
+    is encode-base64(Blob.new(<1 1>), :str), 'AQE=', 'encode Test on immutable bytes, value 1 1';
 }, 'Encode';
 
 subtest {
@@ -32,6 +37,7 @@ subtest {
     is-deeply decode-base64("AA==", :buf), Buf.new(0), 'decode Test on NULL/0 byte';
     is-deeply decode-base64("AQ==", :buf), Buf.new(1), 'decode Test on byte value 1';
     is-deeply decode-base64("/w==", :buf), Buf.new(255), 'decode Test on byte value 255';
+    is-deeply decode-base64("AQE=", :buf), Buf.new(<1 1>), 'decode Test on bytes value 1 1';
 }, 'Decode';
 
 subtest {

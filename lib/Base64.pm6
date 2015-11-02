@@ -12,6 +12,9 @@ our proto sub encode-base64(|) is export {*}
 multi sub encode-base64(Str $str, |c) {
     samewith(Buf.new($str.ords), |c)
 }
+multi sub encode-base64(Blob $blob, |c) {
+    samewith(Buf.new($blob), |c)
+}
 multi sub encode-base64(Bool :$uri! where *.so, |c) {
     samewith(:alpha(@chars64uri), |c)
 }

@@ -40,7 +40,7 @@ Lazy base64 encoding and decoding routines
 
 =head4 B<routine> L<encode-base64>
 
-B<Args> C<$encode-me where Buf|Str, :$pad, :@alpha, Bool :$str>
+B<Args> C<$encode-me where Buf|Str|Blob, :$pad, :@alpha, Bool :$str>
 
 B<Returns> C<Seq|Str>
 
@@ -52,7 +52,7 @@ B<Returns> C<Seq|Str>
     encode-base64($encode-me, :alpha(1..64))   # Set the entire alphabet
     encode-base64($encode-me, :alpha('-','_')) # Same as :uri
 
-Takes a C<Buf> and applies base64 encoding with the requested options. If passed a C<Str> it will be converted to a C<Buf> via C<.ords> first.
+Takes a C<Buf> and applies base64 encoding with the requested options. If passed a C<Str> it will be converted to a C<Buf> via C<.ords> first. If passed a C<Blob> it will be converted to a C<Buf> first.
 
     > say encode-base64("test", :str)
     dGVzdA==
