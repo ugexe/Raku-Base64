@@ -61,7 +61,8 @@ multi sub decode-base64(Str $str, :$pad, :@alpha, |c --> Seq) {
         state %lookup = $encodings.kv.hash.antipairs;
         my $n   = [+] $chunk.map: { (%lookup{$_} || 0) +< ((state $m = 24) -= 6) }
         my $res = (16, 8, 0).map: { $n +> $_ +& 255 }
-        slip($res.grep(* > 0));
+        #slip($res.grep(* > 0));
+        slip($res.head( 3 - ( 4 - $chunk.elems ) ) );
     }
 }
 
