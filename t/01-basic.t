@@ -1,7 +1,7 @@
 use Base64;
 
 use Test;
-plan 5;
+plan 6;
 
 subtest {
     is encode-base64("", :str), '', 'Encoding the empty string';
@@ -41,6 +41,10 @@ subtest {
 }, 'Decode';
 
 subtest {
+    is encode-base64( decode-base64("w0OfABDTw0Of", :buf) , :str ), "w0OfABDTw0Of", "decoded then re-encoded value equals to origianl one, with A in first position of a 4 characters group";
+}
+
+subtest {
     is encode-base64("\x14\xfb\x9c\x03\xd9\x7e", :str), "FPucA9l+";
     is encode-base64("\x14\xfb\x9c\x03\xd9", :str),     "FPucA9k=";
     is encode-base64("\x14\xfb\x9c\x03", :str),         "FPucAw==";
@@ -53,5 +57,5 @@ subtest {
 
 subtest {
     my @invalid = <!!!! ==== =AAA A=AA AA=A AA==A AAA=AAAA AAAAA AAAAAA A= A== AA= AA== AAA= AAAA AAAAAA=>;
-    @invalid.map: { is-deeply decode-base64($_, :uri), Buf.new(0) }
+    @invalid.map: { is-deeply decode-base64($_, :uri).grep( * > 0 ).elems , 0 }
 }, 'Currupt/invalid encodings';
