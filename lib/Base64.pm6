@@ -32,7 +32,7 @@ multi sub encode-base64(Blob $blob, :$pad, :@alpha, |c --> Seq) {
             $c.value +< ((state $m = 24) -= 8)
         }
         my $res = (18, 12, 6, 0).map({ $n +> $_ +& 63 });
-        (slip($encodings[$res>>.item][0..*-($padding ?? $padding+1 !! 0)]),
+        (slip($encodings[$res[*]][0..*-($padding ?? $padding+1 !! 0)]),
             ((^$padding).map({"$pad"}).Slip if $padding)).Slip;
     }
 }
