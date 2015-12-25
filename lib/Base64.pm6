@@ -43,9 +43,9 @@ multi sub decode-base64(Blob $blob, |c) {
     samewith($blob.decode, |c)
 }
 multi sub decode-base64(Bool :$uri! where *.so, |c) {
-    samewith(:buf, :alpha(@chars64uri), |c);
+    samewith(:bin, :alpha(@chars64uri), |c);
 }
-multi sub decode-base64(Bool :$buf! where *.so, |c --> Blob)  {
+multi sub decode-base64(Bool :buf(:$bin)! where *.so, |c --> Blob)  {
     Buf.new(samewith(|c) || 0);
 }
 multi sub decode-base64(:$pad = '=', |c)            {
