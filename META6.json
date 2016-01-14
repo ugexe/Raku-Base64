@@ -1,5 +1,5 @@
 {
-    "perl"        : "6.0.0",
+    "perl"        : "6",
     "name"        : "Base64",
     "version"     : "*",
     "owner"       : "ugexe",
