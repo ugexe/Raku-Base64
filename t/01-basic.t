@@ -1,7 +1,7 @@
 use Base64;
 
 use Test;
-plan 6;
+plan 7;
 
 subtest {
     is encode-base64("", :str), '', 'Encoding the empty string';
@@ -42,6 +42,11 @@ subtest {
 
 subtest {
     is encode-base64( decode-base64("w0OfABDTw0Of", :bin) , :str ), "w0OfABDTw0Of", "decoded then re-encoded value equals to origianl one, with A in first position of a 4 characters group";
+}
+
+subtest {
+    is encode-base64("test", :str, :pad), "dGVzdA==";
+    is encode-base64("test", :str, :!pad), "dGVzdAAA";
 }
 
 subtest {
