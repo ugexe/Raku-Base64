@@ -12,7 +12,7 @@ multi sub encode-base64(Bool:D :$str! where *.so, |c --> Str) { samewith(|c).joi
 multi sub encode-base64(Str:D  $str, |c)                      { samewith(Blob.new($str.ords), |c)      }
 multi sub encode-base64(
     Blob:D $blob,
-    Str:D :$pad where *.chars == 1 = '=',
+    Str:D :$pad where *.chars <= 1 = '=',
     Str:D :@alpha                  = @chars64std,
 --> Seq) {
     grep *.so, $blob.rotor(3, :partial).map: -> $chunk {
