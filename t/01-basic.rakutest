@@ -1,7 +1,8 @@
+use Test:ver<6.c+>;
+plan 7;
+
 use Base64;
 
-use Test;
-plan 7;
 
 subtest 'Encode' => {
     is encode-base64("", :str), '', 'Encoding the empty string';
